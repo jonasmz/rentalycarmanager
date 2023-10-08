@@ -6,10 +6,10 @@ namespace RentalyManager.Controllers
 {
     [ApiController]
     [Route("api/testing")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TestController : ControllerBase
     {
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public ActionResult<string> Get()
         {
             return Ok("Recibido");
