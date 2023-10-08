@@ -81,18 +81,17 @@ namespace RentalyManager.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<ActionResult<List<Client>>> Get()
         {
             var max_limit = 100; 
-            Int32.TryParse(__config["ppc"], out max_limit);
+            Int32.TryParse(__config["max_items_per_consult"], out max_limit);
 
             try
             {
                 var result = await __context.Clients.Take(max_limit).ToListAsync();
 
-                if (result == null) return StatusCode(404, "Not found Clients");
+                if (result == null) return NotFound();
 
                 return Ok(result);
             }catch (Exception ex)
@@ -106,7 +105,7 @@ namespace RentalyManager.Controllers
         {
             var max_limit = 25;
             Int32.TryParse(__config.GetSection("Pagination")["Limit"], out max_limit);
-            var ipp = (limit > max_limit) ? max_limit : limit;
+            var ipp = (limit > max_limit || limit < 1) ? max_limit : limit;
             var skip = (page - 1 ) * ipp;
             try
             {
